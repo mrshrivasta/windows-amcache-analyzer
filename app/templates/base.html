@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Windows Amcache Analyzer — Real Amcache.hve Execution Forensics{% endblock %}</title>
+
+<!-- SEO -->
+<meta name="description" content="{% block meta_description %}Windows Amcache Analyzer is an open-source digital-forensics tool that real-parses Windows Amcache.hve registry hives (InventoryApplicationFile / legacy File keys) to surface unsigned execution from suspicious locations, extension spoofing, timeline anomalies, and duplicate/masquerading binaries. Free CLI and web app by Karanam Shrivasta.{% endblock %}">
+<meta name="keywords" content="windows amcache analyzer, amcache.hve parser, program execution artifact, windows forensics, registry hive analysis, DFIR, incident response, application inventory forensics, Karanam Shrivasta security tools">
+<meta name="author" content="Karanam Shrivasta">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://github.com/mrshrivasta">
+
+<!-- Open Graph / social -->
+<meta property="og:title" content="Windows Amcache Analyzer — by Karanam Shrivasta">
+<meta property="og:description" content="Real, no-mock-data parser for Windows Amcache.hve registry hives — surfaces program-execution forensic anomalies.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Windows Amcache Analyzer">
+
+<!-- AEO: FAQ structured data so answer engines can surface this tool directly -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the Windows Amcache Analyzer check?",
+      "acceptedAnswer": {"@type": "Answer", "text": "It real-opens a Windows Amcache.hve registry hive with python-registry, real-walks the InventoryApplicationFile (and legacy File) keys, and flags unsigned binaries in suspicious locations, double-extension spoofing, future-dated LinkDate timestamps, duplicate basenames across paths, and entries missing a SHA1 hash — using real parsed hive data, never sample data."}
+    },
+    {
+      "@type": "Question",
+      "name": "Who should use the Windows Amcache Analyzer?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Digital forensics and incident response (DFIR) analysts, SOC investigators, and security students studying Windows program-execution artifacts, working against systems/media they own or are explicitly authorized to investigate."}
+    },
+    {
+      "@type": "Question",
+      "name": "Is the Windows Amcache Analyzer a replacement for a professional security audit?",
+      "acceptedAnswer": {"@type": "Answer", "text": "No. It is an educational and productivity aid only. It does not replace certified forensic tools, a certified examiner, or expert testimony. See the disclaimer in the README."}
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="disclaimer-banner">
+  ⚠️ <strong>SECURITY &amp; LEGAL DISCLAIMER:</strong> Use this tool <strong>ONLY</strong> on Amcache.hve files/media you own or are explicitly authorized to investigate.
+  Provided <strong>"AS IS", WITHOUT WARRANTY OF ANY KIND</strong>. Not a substitute for a certified forensic examiner or expert testimony. The author,
+  <strong>Karanam Shrivasta</strong>, accepts <strong>NO LIABILITY</strong> for any damage, data loss, downtime, or legal consequences arising from
+  use or misuse of this software. By using this tool you accept full responsibility for your actions. See the README for the complete disclaimer.
+</div>
+
+{% if current_user.is_authenticated %}
+<nav class="navbar">
+  <div class="nav-brand">🔐 Windows Amcache Analyzer</div>
+  <div class="nav-links">
+    <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+    <a href="{{ url_for('logs.index') }}">Logs</a>
+    <a href="{{ url_for('alerts.index') }}">Alerts</a>
+    <a href="{{ url_for('incidents.index') }}">Incidents</a>
+    <a href="{{ url_for('analytics.index') }}">Analytics</a>
+    <a href="{{ url_for('reports.index') }}">Reports</a>
+    <a href="{{ url_for('settings.index') }}">Settings</a>
+    <a href="{{ url_for('auth.logout') }}">Logout ({{ current_user.username }})</a>
+  </div>
+</nav>
+{% endif %}
+
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="watermark-footer">
+  <p>
+    Windows Amcache Analyzer &copy; {{ 2026 }} — Developed by <strong>Karanam Shrivasta</strong>
+    &middot; <a href="{{ github_url }}" target="_blank" rel="noopener">GitHub</a>
+    &middot; <a href="{{ linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>
+  </p>
+  <p class="footer-disclaimer">For authorized security auditing and educational use only. No warranty. Use at your own risk.</p>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
